@@ -1,0 +1,38 @@
+import Foundation
+struct Char {
+    let str: String
+    var sum: Int
+    init (_ str: String, _ sum: Int) {
+        self.str = str
+        self.sum = sum
+    }
+}
+
+func orderWeight(_ s: String) -> String {
+    var ans: String = ""
+    var charList: [Char] = []
+    let arr = s.components(separatedBy: " ").map { String($0) }.filter{!$0.isEmpty}
+    for val in arr {
+        charList.append(Char(val, 0))
+    }
+    for (key, _) in charList.enumerated() {
+        let tmpSum = Array(charList[key].str).map {String($0)}
+        let sum = tmpSum.map { Int($0)!}.reduce(0, +)
+        charList[key].sum += sum
+    }
+    let sortedCharList = charList.sorted {
+        if $0.sum == $1.sum {
+            return $0.str < $1.str
+        } else {
+            return $0.sum < $1.sum
+        }
+    }
+    for (key, val) in sortedCharList.enumerated() {
+        if key == 0 {
+            ans += String(val.str)
+        } else {
+            ans += " " + String(val.str)
+        }
+    }
+    return ans
+}
